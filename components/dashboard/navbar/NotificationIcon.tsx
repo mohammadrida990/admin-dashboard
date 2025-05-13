@@ -19,15 +19,17 @@ const NotificationIcon = () => {
       href="/dashboard/notifications"
       className="flex flex-row justify-center items-center gap-5 relative cursor-pointer"
     >
-      <span
-        className="
+      {data?.newCount && (
+        <span
+          className="
           absolute -top-2 -right-1 bg-red-500  rounded-full
           min-h-4 min-w-4 text-center flex justify-center items-center
           text-[10px]
         "
-      >
-        {data?.newCount}
-      </span>
+        >
+          {data?.newCount}
+        </span>
+      )}
 
       <MdNotifications size={20} />
     </Link>
