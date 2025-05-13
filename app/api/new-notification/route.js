@@ -17,7 +17,7 @@ export async function GET() {
 
     const res = newProductCount + newUserCount;
 
-    return new Response(JSON.stringify({ newCount: res || 0 }), {
+    return new Response(JSON.stringify({ newCount: res }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });

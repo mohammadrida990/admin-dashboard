@@ -9,17 +9,20 @@ const fetchNotificationCount = async () => {
   if (!res.ok) {
     throw new Error("Failed to fetch new notifications");
   }
-  return res.json();
+  const data = await res.json();
+
+  return data;
 };
 
 const NotificationIcon = () => {
   const { data } = useSWR("/api/new-notification", fetchNotificationCount);
+
   return (
     <Link
       href="/dashboard/notifications"
       className="flex flex-row justify-center items-center gap-5 relative cursor-pointer"
     >
-      {data?.newCount && (
+      {data?.newCount > 0 && (
         <span
           className="
           absolute -top-2 -right-1 bg-red-500  rounded-full
@@ -30,7 +33,6 @@ const NotificationIcon = () => {
           {data?.newCount}
         </span>
       )}
-
       <MdNotifications size={20} />
     </Link>
   );
