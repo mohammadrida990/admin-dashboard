@@ -386,3 +386,41 @@ export const fetchProductCat = async () => {
 
   return result;
 };
+
+export const fetchUnread = async () => {
+  const unReadUsers = await prisma.user.findMany({
+    where: {
+      isRead: false,
+    },
+  });
+
+  const unReadProducts = await prisma.product.findMany({
+    where: {
+      isRead: false,
+    },
+  });
+
+  return { unReadUsers, unReadProducts };
+};
+
+export const markAsReadUser = async (id: number) => {
+  await prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      isRead: true,
+    },
+  });
+};
+
+export const markAsReadProduct = async (id: number) => {
+  await prisma.product.update({
+    where: {
+      id,
+    },
+    data: {
+      isRead: true,
+    },
+  });
+};

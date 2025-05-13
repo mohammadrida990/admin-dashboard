@@ -5,6 +5,8 @@ import {
   addUser,
   deleteProduct,
   deleteUser,
+  markAsReadProduct,
+  markAsReadUser,
   updateProductDetails,
   updateUserDetails,
 } from "./data";
@@ -185,4 +187,14 @@ export const authenticate = async (
 export const logout = async () => {
   //when used in client its redirect auto with out redirect: true
   await signOut({ redirect: true });
+};
+
+export const markAsReadUserAction = async (id: number) => {
+  await markAsReadUser(id);
+  revalidatePath("/dashboard/notifications");
+};
+
+export const markAsReadProductAction = async (id: number) => {
+  await markAsReadProduct(id);
+  revalidatePath("/dashboard/notifications");
 };

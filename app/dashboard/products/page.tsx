@@ -27,7 +27,6 @@ const Products = async ({ searchParams }: ProductsPageProps) => {
 
   return (
     <div className="w-[280px] sm:w-full">
-      {" "}
       <div className="flex justify-between items-center bg-foreground p-5 rounded-lg mt-5">
         <Search placeholder="Enter a product" />
 
@@ -38,7 +37,6 @@ const Products = async ({ searchParams }: ProductsPageProps) => {
         </Link>
       </div>
       <Table className="w-full md:w-full">
-        {" "}
         <TableHeader>
           <TableRow>
             <TableHead className="text-left">Title</TableHead>

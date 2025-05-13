@@ -9,7 +9,15 @@ export async function GET() {
       },
     });
 
-    return new Response(JSON.stringify({ newUserCount }), {
+    const newProductCount = await prisma.product.count({
+      where: {
+        isRead: false,
+      },
+    });
+
+    const res = newProductCount + newUserCount;
+
+    return new Response(JSON.stringify({ newCount: res || 0 }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
