@@ -1,3 +1,4 @@
+"use client";
 import { addProductAction } from "@/app/lib/actions";
 import SubmitButton from "@/components/SubmitButton";
 import { Input } from "@/components/ui/input";
@@ -9,13 +10,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import React from "react";
+import React, { useActionState } from "react";
 
 const AddProductPage = () => {
+  const [errorMessage, dispatch] = useActionState(addProductAction, undefined);
   return (
     <div className="bg-foreground p-5 rounded-lg mt-5 w-full">
+      <p className="text-red-500 text-center mb-5">{errorMessage?.error}</p>
+
       <form
-        action={addProductAction}
+        action={dispatch}
         className="flex flex-col justify-between gap-5 w-full"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-7 w-full">

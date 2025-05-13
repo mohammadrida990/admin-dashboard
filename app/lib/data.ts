@@ -82,6 +82,14 @@ export const addUser = async ({
   isAdmin: boolean;
   isActive: boolean;
 }) => {
+  const checkUser = await prisma.user.findFirst({
+    where: {
+      OR: [{ username }, { email }],
+    },
+  });
+
+  if (checkUser) throw new Error("username/email already exist");
+
   await prisma.user.create({
     data: { username, email, password, phone, address, isAdmin, isActive },
   });
@@ -107,6 +115,14 @@ export const addProduct = async ({
   size,
   category,
 }: NewProduct) => {
+  const checkProduct = await prisma.product.findFirst({
+    where: {
+      title,
+    },
+  });
+
+  if (checkProduct) throw new Error("Title already exist");
+
   await prisma.product.create({
     data: { title, desc, price, stock, color, size, category },
   });

@@ -13,7 +13,37 @@ import bcrypt from "bcrypt";
 import { signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
 
-export const addUserAction = async (formData: FormData) => {
+type NewProduct =
+  | {
+      id?: string;
+      title?: string;
+      desc?: string;
+      price?: number;
+      stock?: number;
+      color?: string;
+      size?: string;
+      category?: string;
+      error?: string;
+    }
+  | undefined;
+
+type NewUser =
+  | {
+      username?: string;
+      email?: string;
+      password?: string;
+      phone?: number;
+      address?: number;
+      isAdmin?: boolean;
+      isActive?: boolean;
+      error?: string;
+    }
+  | undefined;
+
+export const addUserAction = async (
+  state: NewUser,
+  formData: FormData
+): Promise<NewUser> => {
   const data = Object.fromEntries(formData) as Record<string, string>;
 
   const salt = await bcrypt.genSalt(10);
@@ -29,23 +59,22 @@ export const addUserAction = async (formData: FormData) => {
     isActive: data.isActive === "true" || data.isActive === "on",
   };
 
-  await addUser(newUser);
-
+  try {
+    await addUser(newUser);
+  } catch (error) {
+    if (error instanceof Error) {
+      return { error: error.message || "Unexpected error" };
+    }
+    return { error: "Unknown error" };
+  }
   revalidatePath("/dashboard/users");
   redirect("/dashboard/users");
 };
 
-type NewProduct = {
-  id?: string;
-  title: string;
-  desc: string;
-  price: number;
-  stock: number;
-  color: string;
-  size: string;
-  category: string;
-};
-export const addProductAction = async (formData: FormData) => {
+export const addProductAction = async (
+  state: NewProduct,
+  formData: FormData
+): Promise<NewProduct> => {
   const data = Object.fromEntries(formData) as Record<string, string>;
 
   const newProduct = {
@@ -56,9 +85,16 @@ export const addProductAction = async (formData: FormData) => {
     color: data.color,
     size: data.size,
     category: data.category,
-  } as unknown as NewProduct;
+  };
 
-  await addProduct(newProduct);
+  try {
+    await addProduct(newProduct);
+  } catch (error) {
+    if (error instanceof Error) {
+      return { error: error.message || "Unexpected error" };
+    }
+    return { error: "Unknown error" };
+  }
 
   revalidatePath("/dashboard/products");
   redirect("/dashboard/products");
@@ -111,7 +147,7 @@ export const updateProductDetailsAction = async (formData: FormData) => {
     color: data.color,
     size: data.size,
     category: data.category,
-  } as unknown as NewProduct;
+  };
 
   await updateProductDetails(newProduct);
 

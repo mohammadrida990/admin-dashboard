@@ -1,3 +1,4 @@
+"use client";
 import { addUserAction } from "@/app/lib/actions";
 import SubmitButton from "@/components/SubmitButton";
 import { Input } from "@/components/ui/input";
@@ -9,13 +10,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import React from "react";
+import React, { useActionState } from "react";
 
 const AddUserPage = () => {
+  const [errorMessage, dispatch] = useActionState(addUserAction, undefined);
+  const handleSubmit = async (formData: FormData) => {
+    await dispatch(formData);
+  };
+
   return (
     <div className="bg-foreground p-5 rounded-lg mt-5 w-full container">
+      <p className="text-red-500 text-center mb-5">{errorMessage?.error}</p>
       <form
-        action={addUserAction}
+        action={handleSubmit}
         className="flex flex-col justify-between gap-5 w-full"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-7">
